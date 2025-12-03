@@ -1,256 +1,304 @@
-'use client';
+"use client";
 
-import { motion } from 'framer-motion';
-import { 
-  Activity, 
-  BarChart3, 
-  Bell, 
-  Clock, 
-  Database, 
-  Shield, 
-  Smartphone, 
+import { motion } from "framer-motion";
+import {
+  Activity,
+  Brain,
+  Shield,
+  Clock,
   Zap,
-  CheckCircle,
-  ArrowRight
-} from 'lucide-react';
-import Link from 'next/link';
+  LineChart,
+  Cpu,
+  Bell,
+  Database,
+  Cloud,
+  Lock,
+  BarChart3,
+  Layers,
+  Target,
+  Gauge,
+  Wifi,
+  ArrowRight,
+} from "lucide-react";
+import Link from "next/link";
+import { Card } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { GlowOrb, GridBackground } from "@/components/effects/Backgrounds";
+import { FadeIn, StaggerContainer, StaggerItem } from "@/components/effects/Animations";
 
 const features = [
   {
-    icon: Activity,
-    title: "Real-time Monitoring",
-    description: "Monitor machine health metrics in real-time with our advanced sensor network. Get instant visibility into all your equipment.",
-    color: "blue",
-    stats: "< 100ms latency"
+    icon: Brain,
+    title: "Ensemble ML Models",
+    description: "Combines Random Forest, XGBoost, Neural Networks, and SVM for maximum accuracy and reliability.",
+    gradient: "from-purple-500 to-pink-500",
+    stats: "98.5% Accuracy",
   },
   {
-    icon: BarChart3,
-    title: "ML-Powered Analytics",
-    description: "Leverage machine learning algorithms to predict maintenance needs with 98%+ accuracy using historical and real-time data.",
-    color: "emerald",
-    stats: "98.5% accuracy"
+    icon: Activity,
+    title: "Real-time Monitoring",
+    description: "Live sensor data streaming with sub-second latency for immediate insights and responses.",
+    gradient: "from-cyan-500 to-blue-500",
+    stats: "<100ms Latency",
+  },
+  {
+    icon: Shield,
+    title: "Failure Prevention",
+    description: "Predict failures up to 72 hours in advance with confidence scoring and risk assessment.",
+    gradient: "from-emerald-500 to-teal-500",
+    stats: "72h Advance Warning",
   },
   {
     icon: Bell,
     title: "Smart Alerts",
-    description: "Receive instant notifications via email, SMS, or push when maintenance attention is required or anomalies are detected.",
-    color: "red",
-    stats: "Instant alerts"
-  },
-  {
-    icon: Clock,
-    title: "Predictive Scheduling",
-    description: "Optimize maintenance schedules based on actual equipment condition rather than fixed time intervals.",
-    color: "purple",
-    stats: "40% cost savings"
+    description: "Intelligent notification system with severity levels and configurable thresholds.",
+    gradient: "from-amber-500 to-orange-500",
+    stats: "24/7 Monitoring",
   },
   {
     icon: Database,
-    title: "Data Management",
-    description: "Centralized storage and analysis of all maintenance-related data with enterprise-grade security and compliance.",
-    color: "indigo",
-    stats: "Unlimited storage"
+    title: "RAG Knowledge Base",
+    description: "Retrieval Augmented Generation for context-aware maintenance recommendations.",
+    gradient: "from-blue-500 to-indigo-500",
+    stats: "1000+ Documents",
   },
   {
-    icon: Shield,
-    title: "Risk Prevention",
-    description: "Identify and prevent potential equipment failures before they occur, reducing unplanned downtime significantly.",
-    color: "amber",
-    stats: "70% less downtime"
+    icon: Cloud,
+    title: "Edge Computing",
+    description: "Process data at the edge for ultra-low latency responses and offline capability.",
+    gradient: "from-pink-500 to-rose-500",
+    stats: "50% Less Latency",
   },
   {
-    icon: Smartphone,
-    title: "Mobile Access",
-    description: "Access your dashboard and alerts from any device, anywhere with our responsive web and native mobile apps.",
-    color: "pink",
-    stats: "iOS & Android"
+    icon: BarChart3,
+    title: "Advanced Analytics",
+    description: "Deep insights with trend analysis, anomaly detection, and pattern recognition.",
+    gradient: "from-violet-500 to-purple-500",
+    stats: "100+ Metrics",
   },
   {
-    icon: Zap,
-    title: "Performance Optimization",
-    description: "Maximize equipment efficiency and reduce downtime with AI-driven insights and recommendations.",
-    color: "orange",
-    stats: "25% efficiency gain"
-  }
+    icon: Lock,
+    title: "Enterprise Security",
+    description: "Bank-grade encryption, role-based access control, and audit logging.",
+    gradient: "from-gray-500 to-zinc-500",
+    stats: "SOC2 Compliant",
+  },
+  {
+    icon: Layers,
+    title: "Multi-machine Support",
+    description: "Monitor unlimited machines with individual profiles and fleet-wide analytics.",
+    gradient: "from-teal-500 to-cyan-500",
+    stats: "Unlimited Machines",
+  },
 ];
 
-const specifications = {
-  sensors: [
-    "Temperature monitoring (±0.1°C accuracy)",
-    "Vibration analysis (up to 20kHz)",
-    "Rotation speed measurement",
-    "Torque monitoring",
-    "Power consumption tracking",
-    "Pressure sensors",
-    "Acoustic emission detection"
-  ],
-  system: [
-    "Modern web browser (Chrome, Firefox, Safari, Edge)",
-    "Internet connection (minimum 1Mbps)",
-    "Compatible with all major operating systems",
-    "Mobile-responsive design",
-    "99.9% system availability",
-    "GDPR and SOC 2 compliant",
-    "API access for integrations"
-  ]
-};
+const techStack = [
+  { name: "Python", icon: "🐍" },
+  { name: "FastAPI", icon: "⚡" },
+  { name: "TensorFlow", icon: "🧠" },
+  { name: "XGBoost", icon: "🚀" },
+  { name: "PostgreSQL", icon: "🐘" },
+  { name: "Redis", icon: "⚡" },
+  { name: "Next.js", icon: "▲" },
+  { name: "Docker", icon: "🐳" },
+];
 
-const colorClasses: Record<string, { bg: string; iconBg: string; text: string; border: string }> = {
-  blue: { bg: 'bg-blue-50', iconBg: 'bg-blue-100', text: 'text-blue-600', border: 'border-blue-200' },
-  emerald: { bg: 'bg-emerald-50', iconBg: 'bg-emerald-100', text: 'text-emerald-600', border: 'border-emerald-200' },
-  red: { bg: 'bg-red-50', iconBg: 'bg-red-100', text: 'text-red-600', border: 'border-red-200' },
-  purple: { bg: 'bg-purple-50', iconBg: 'bg-purple-100', text: 'text-purple-600', border: 'border-purple-200' },
-  indigo: { bg: 'bg-indigo-50', iconBg: 'bg-indigo-100', text: 'text-indigo-600', border: 'border-indigo-200' },
-  amber: { bg: 'bg-amber-50', iconBg: 'bg-amber-100', text: 'text-amber-600', border: 'border-amber-200' },
-  pink: { bg: 'bg-pink-50', iconBg: 'bg-pink-100', text: 'text-pink-600', border: 'border-pink-200' },
-  orange: { bg: 'bg-orange-50', iconBg: 'bg-orange-100', text: 'text-orange-600', border: 'border-orange-200' },
-};
+const comparison = [
+  { feature: "Prediction Accuracy", us: "98.5%", others: "75-85%" },
+  { feature: "Advance Warning", us: "72 hours", others: "24 hours" },
+  { feature: "False Positive Rate", us: "<2%", others: "15-20%" },
+  { feature: "Setup Time", us: "< 1 day", others: "1-2 weeks" },
+  { feature: "ML Models", us: "Ensemble (4+)", others: "Single model" },
+];
 
 export default function Features() {
   return (
-    <div className="py-20">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Header */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="text-center mb-20"
-        >
-          <div className="inline-flex items-center px-4 py-2 bg-blue-100 rounded-full text-blue-700 text-sm font-medium mb-6">
-            <Zap className="h-4 w-4 mr-2" />
-            Powerful Features
-          </div>
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 mb-6">
-            Comprehensive Maintenance{' '}
-            <span className="bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
-              Features
-            </span>
-          </h1>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
-            Our platform combines advanced technology with practical solutions to deliver
-            a complete predictive maintenance system for modern industrial operations.
-          </p>
-        </motion.div>
+    <div className="min-h-screen bg-gray-950 pt-20">
+      {/* Background */}
+      <GridBackground className="opacity-30 fixed inset-0" />
+      <GlowOrb color="cyan" size="xl" className="fixed top-40 -left-40 opacity-20" />
+      <GlowOrb color="purple" size="lg" className="fixed bottom-40 -right-40 opacity-20" />
 
-        {/* Features Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-24">
-          {features.map((feature, index) => {
-            const Icon = feature.icon;
-            const colors = colorClasses[feature.color];
-            
-            return (
-              <motion.div
-                key={feature.title}
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: index * 0.1 }}
-                className="group"
-              >
-                <div className={`h-full bg-white rounded-2xl shadow-lg border border-gray-100 p-6 hover:shadow-xl transition-all duration-300 hover:-translate-y-1`}>
-                  <div className={`${colors.iconBg} p-3 rounded-xl inline-flex mb-4 group-hover:scale-110 transition-transform`}>
-                    <Icon className={`h-6 w-6 ${colors.text}`} />
-                  </div>
-                  <h3 className="text-lg font-bold text-gray-900 mb-2">{feature.title}</h3>
-                  <p className="text-gray-600 text-sm leading-relaxed mb-4">{feature.description}</p>
-                  <div className={`inline-flex items-center px-3 py-1 ${colors.bg} rounded-full`}>
-                    <span className={`text-xs font-semibold ${colors.text}`}>{feature.stats}</span>
-                  </div>
-                </div>
-              </motion.div>
-            );
-          })}
-        </div>
-
-        {/* Technical Specifications */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className="mb-24"
-        >
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-              Technical Specifications
-            </h2>
-            <p className="text-lg text-gray-600">
-              Enterprise-grade capabilities for industrial environments
+      {/* Hero Section */}
+      <section className="relative py-20 lg:py-32">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <FadeIn className="text-center max-w-4xl mx-auto">
+            <Badge className="mb-6">
+              <Zap className="h-3 w-3 mr-1" />
+              Enterprise Features
+            </Badge>
+            <h1 className="text-4xl md:text-6xl font-bold text-white mb-6">
+              Powerful Features for{" "}
+              <span className="bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-500 bg-clip-text text-transparent">
+                Industrial Excellence
+              </span>
+            </h1>
+            <p className="text-xl text-gray-400 mb-10 leading-relaxed">
+              Our platform combines cutting-edge AI with practical industrial solutions
+              to deliver the most comprehensive predictive maintenance system available.
             </p>
-          </div>
-          
-          <div className="bg-white rounded-3xl shadow-xl border border-gray-100 overflow-hidden">
-            <div className="grid grid-cols-1 lg:grid-cols-2 divide-y lg:divide-y-0 lg:divide-x divide-gray-100">
-              <div className="p-8 lg:p-10">
-                <div className="flex items-center space-x-3 mb-6">
-                  <div className="bg-blue-100 p-2 rounded-lg">
-                    <Activity className="h-5 w-5 text-blue-600" />
-                  </div>
-                  <h3 className="text-xl font-bold text-gray-900">Sensor Capabilities</h3>
-                </div>
-                <ul className="space-y-4">
-                  {specifications.sensors.map((spec, index) => (
-                    <motion.li
-                      key={spec}
-                      initial={{ opacity: 0, x: -20 }}
-                      whileInView={{ opacity: 1, x: 0 }}
-                      viewport={{ once: true }}
-                      transition={{ delay: index * 0.05 }}
-                      className="flex items-start space-x-3"
-                    >
-                      <CheckCircle className="h-5 w-5 text-emerald-500 mt-0.5 flex-shrink-0" />
-                      <span className="text-gray-600">{spec}</span>
-                    </motion.li>
-                  ))}
-                </ul>
-              </div>
-              <div className="p-8 lg:p-10">
-                <div className="flex items-center space-x-3 mb-6">
-                  <div className="bg-purple-100 p-2 rounded-lg">
-                    <Database className="h-5 w-5 text-purple-600" />
-                  </div>
-                  <h3 className="text-xl font-bold text-gray-900">System Requirements</h3>
-                </div>
-                <ul className="space-y-4">
-                  {specifications.system.map((spec, index) => (
-                    <motion.li
-                      key={spec}
-                      initial={{ opacity: 0, x: -20 }}
-                      whileInView={{ opacity: 1, x: 0 }}
-                      viewport={{ once: true }}
-                      transition={{ delay: index * 0.05 }}
-                      className="flex items-start space-x-3"
-                    >
-                      <CheckCircle className="h-5 w-5 text-emerald-500 mt-0.5 flex-shrink-0" />
-                      <span className="text-gray-600">{spec}</span>
-                    </motion.li>
-                  ))}
-                </ul>
-              </div>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <Link href="/dashboard">
+                <Button variant="glow" size="lg">
+                  <Brain className="mr-2 h-5 w-5" />
+                  Try Live Demo
+                </Button>
+              </Link>
+              <Link href="/contact">
+                <Button variant="outline" size="lg">
+                  Contact Sales
+                </Button>
+              </Link>
             </div>
-          </div>
-        </motion.div>
+          </FadeIn>
+        </div>
+      </section>
 
-        {/* CTA */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className="text-center bg-gradient-to-br from-blue-600 to-indigo-700 rounded-3xl p-12 lg:p-16"
-        >
-          <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
-            Ready to See It in Action?
-          </h2>
-          <p className="text-lg text-blue-100 mb-8 max-w-2xl mx-auto">
-            Experience the power of predictive maintenance with our live dashboard demo.
-          </p>
-          <Link
-            href="/dashboard"
-            className="inline-flex items-center justify-center px-8 py-4 bg-white text-blue-600 rounded-xl font-semibold hover:bg-blue-50 transition-all duration-200 shadow-xl group"
-          >
-            View Live Dashboard
-            <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
-          </Link>
-        </motion.div>
-      </div>
+      {/* Features Grid */}
+      <section className="relative py-20">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <StaggerContainer className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {features.map((feature) => {
+              const Icon = feature.icon;
+              return (
+                <StaggerItem key={feature.title}>
+                  <motion.div
+                    whileHover={{ y: -8, scale: 1.02 }}
+                    transition={{ type: "spring", stiffness: 300 }}
+                    className="h-full"
+                  >
+                    <Card variant="glass" className="p-8 h-full group cursor-pointer">
+                      <div className="flex items-start justify-between mb-6">
+                        <div
+                          className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${feature.gradient} p-0.5`}
+                        >
+                          <div className="w-full h-full rounded-2xl bg-gray-900 flex items-center justify-center group-hover:bg-transparent transition-colors">
+                            <Icon className="h-7 w-7 text-white" />
+                          </div>
+                        </div>
+                        <Badge variant="secondary" className="text-xs">
+                          {feature.stats}
+                        </Badge>
+                      </div>
+                      <h3 className="text-xl font-bold text-white mb-3 group-hover:text-cyan-400 transition-colors">
+                        {feature.title}
+                      </h3>
+                      <p className="text-gray-400 leading-relaxed">
+                        {feature.description}
+                      </p>
+                    </Card>
+                  </motion.div>
+                </StaggerItem>
+              );
+            })}
+          </StaggerContainer>
+        </div>
+      </section>
+
+      {/* Tech Stack */}
+      <section className="relative py-20 bg-gray-900/50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <FadeIn className="text-center mb-12">
+            <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
+              Built with Modern Technology
+            </h2>
+            <p className="text-gray-400 max-w-2xl mx-auto">
+              Our platform leverages the latest technologies for maximum performance and reliability.
+            </p>
+          </FadeIn>
+          <div className="flex flex-wrap justify-center gap-4">
+            {techStack.map((tech, i) => (
+              <motion.div
+                key={tech.name}
+                initial={{ opacity: 0, scale: 0.8 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.1 }}
+                whileHover={{ scale: 1.05, y: -4 }}
+              >
+                <Card variant="default" className="px-6 py-4 flex items-center gap-3">
+                  <span className="text-2xl">{tech.icon}</span>
+                  <span className="text-white font-medium">{tech.name}</span>
+                </Card>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Comparison Table */}
+      <section className="relative py-20">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          <FadeIn className="text-center mb-12">
+            <Badge className="mb-4">
+              <Target className="h-3 w-3 mr-1" />
+              Comparison
+            </Badge>
+            <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
+              Why We&apos;re Different
+            </h2>
+            <p className="text-gray-400">
+              See how PredictiveCare compares to traditional solutions.
+            </p>
+          </FadeIn>
+
+          <Card variant="glass" className="overflow-hidden">
+            <div className="overflow-x-auto">
+              <table className="w-full">
+                <thead>
+                  <tr className="border-b border-white/10">
+                    <th className="text-left p-4 text-gray-400 font-medium">Feature</th>
+                    <th className="text-center p-4 text-cyan-400 font-medium">PredictiveCare</th>
+                    <th className="text-center p-4 text-gray-500 font-medium">Others</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {comparison.map((row, i) => (
+                    <motion.tr
+                      key={row.feature}
+                      initial={{ opacity: 0, x: -20 }}
+                      whileInView={{ opacity: 1, x: 0 }}
+                      viewport={{ once: true }}
+                      transition={{ delay: i * 0.1 }}
+                      className="border-b border-white/5"
+                    >
+                      <td className="p-4 text-white">{row.feature}</td>
+                      <td className="p-4 text-center">
+                        <span className="px-3 py-1 rounded-full bg-cyan-500/10 text-cyan-400 text-sm font-medium">
+                          {row.us}
+                        </span>
+                      </td>
+                      <td className="p-4 text-center text-gray-500">{row.others}</td>
+                    </motion.tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </Card>
+        </div>
+      </section>
+
+      {/* CTA */}
+      <section className="relative py-20">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <FadeIn>
+            <h2 className="text-3xl md:text-4xl font-bold text-white mb-6">
+              Ready to Experience the Difference?
+            </h2>
+            <p className="text-gray-400 mb-8 max-w-2xl mx-auto">
+              Start your free trial today and see how our AI-powered platform
+              can transform your maintenance operations.
+            </p>
+            <Link href="/contact">
+              <Button variant="glow" size="lg" className="group">
+                Get Started Free
+                <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
+              </Button>
+            </Link>
+          </FadeIn>
+        </div>
+      </section>
     </div>
   );
 }

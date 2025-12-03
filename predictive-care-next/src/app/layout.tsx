@@ -1,23 +1,23 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Inter, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
-import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
+import { Navbar } from "@/components/Navbar";
+import { Footer } from "@/components/Footer";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const inter = Inter({
+  variable: "--font-inter",
   subsets: ["latin"],
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+const jetbrainsMono = JetBrains_Mono({
+  variable: "--font-mono",
   subsets: ["latin"],
 });
 
 export const metadata: Metadata = {
-  title: "PredictiveCare - Smart Industrial Maintenance",
-  description: "Predict and prevent equipment failures before they happen with ML-powered industrial maintenance solutions.",
-  keywords: ["predictive maintenance", "IoT", "machine learning", "industrial", "manufacturing"],
+  title: "PredictiveCare - AI-Powered Industrial Maintenance",
+  description: "Predict and prevent equipment failures before they happen with enterprise ML-powered industrial maintenance solutions.",
+  keywords: ["predictive maintenance", "IoT", "machine learning", "industrial", "manufacturing", "AI"],
 };
 
 export default function RootLayout({
@@ -26,12 +26,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" className="dark">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${inter.variable} ${jetbrainsMono.variable} font-sans antialiased bg-gray-950 text-white`}
       >
         <Navbar />
-        <main className="min-h-screen pt-16">
+        <main className="min-h-screen">
           {children}
         </main>
         <Footer />

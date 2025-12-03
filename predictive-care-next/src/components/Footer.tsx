@@ -1,102 +1,172 @@
-'use client';
+"use client";
 
-import Link from 'next/link';
-import { Settings, Mail, Phone, MapPin, Github, Twitter, Linkedin } from 'lucide-react';
+import Link from "next/link";
+import { motion } from "framer-motion";
+import {
+  Activity,
+  Github,
+  Twitter,
+  Linkedin,
+  Mail,
+  MapPin,
+  Phone,
+  ArrowUpRight,
+  Heart,
+} from "lucide-react";
 
-export default function Footer() {
+const footerLinks = {
+  product: [
+    { name: "Features", href: "/features" },
+    { name: "Dashboard", href: "/dashboard" },
+    { name: "Pricing", href: "/pricing" },
+    { name: "API Docs", href: "/docs" },
+  ],
+  company: [
+    { name: "About Us", href: "/about" },
+    { name: "Careers", href: "/careers" },
+    { name: "Blog", href: "/blog" },
+    { name: "Press", href: "/press" },
+  ],
+  legal: [
+    { name: "Privacy Policy", href: "/privacy" },
+    { name: "Terms of Service", href: "/terms" },
+    { name: "Cookie Policy", href: "/cookies" },
+    { name: "GDPR", href: "/gdpr" },
+  ],
+};
+
+const socialLinks = [
+  { name: "GitHub", href: "https://github.com", icon: Github },
+  { name: "Twitter", href: "https://twitter.com", icon: Twitter },
+  { name: "LinkedIn", href: "https://linkedin.com", icon: Linkedin },
+];
+
+export function Footer() {
   return (
-    <footer className="bg-gradient-to-b from-gray-900 to-gray-950 text-white">
-      <div className="max-w-7xl mx-auto px-4 py-16 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
-          {/* Brand Section */}
-          <div className="lg:col-span-1">
-            <div className="flex items-center space-x-3 mb-6">
-              <div className="bg-gradient-to-r from-blue-500 to-indigo-600 p-2 rounded-xl">
-                <Settings className="h-6 w-6 text-white" />
+    <footer className="relative bg-gray-950 border-t border-white/10">
+      {/* Gradient overlay */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute -top-40 left-1/4 w-96 h-96 bg-cyan-500/5 rounded-full blur-3xl" />
+        <div className="absolute -top-40 right-1/4 w-96 h-96 bg-purple-500/5 rounded-full blur-3xl" />
+      </div>
+
+      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        {/* Main Footer */}
+        <div className="py-16 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-12">
+          {/* Brand */}
+          <div className="lg:col-span-2">
+            <Link href="/" className="flex items-center gap-3 mb-6">
+              <div className="relative">
+                <div className="absolute inset-0 bg-cyan-500/30 blur-xl rounded-full" />
+                <div className="relative p-2 rounded-xl bg-gradient-to-br from-cyan-500 to-blue-600">
+                  <Activity className="w-6 h-6 text-white" />
+                </div>
               </div>
-              <span className="text-xl font-bold">PredictiveCare</span>
-            </div>
-            <p className="text-gray-400 leading-relaxed">
-              Advanced industrial maintenance solutions powered by machine learning and IoT technology.
+              <span className="text-xl font-bold text-white">
+                Predictive<span className="text-cyan-400">Care</span>
+              </span>
+            </Link>
+            <p className="text-gray-400 text-sm leading-relaxed max-w-sm mb-6">
+              AI-powered predictive maintenance platform helping industrial operations 
+              reduce downtime by up to 70% through advanced machine learning algorithms.
             </p>
-            <div className="flex space-x-4 mt-6">
-              <a href="#" className="p-2 bg-gray-800 rounded-lg hover:bg-gray-700 transition-colors">
-                <Twitter className="h-5 w-5" />
-              </a>
-              <a href="#" className="p-2 bg-gray-800 rounded-lg hover:bg-gray-700 transition-colors">
-                <Github className="h-5 w-5" />
-              </a>
-              <a href="#" className="p-2 bg-gray-800 rounded-lg hover:bg-gray-700 transition-colors">
-                <Linkedin className="h-5 w-5" />
-              </a>
-            </div>
-          </div>
-
-          {/* Quick Links */}
-          <div>
-            <h3 className="text-lg font-semibold mb-6">Quick Links</h3>
-            <div className="space-y-4">
-              {['Home', 'Features', 'About', 'Dashboard', 'Contact'].map((item) => (
-                <Link
-                  key={item}
-                  href={item === 'Home' ? '/' : `/${item.toLowerCase()}`}
-                  className="block text-gray-400 hover:text-white transition-colors"
-                >
-                  {item}
-                </Link>
-              ))}
-            </div>
-          </div>
-
-          {/* Contact */}
-          <div>
-            <h3 className="text-lg font-semibold mb-6">Contact</h3>
-            <div className="space-y-4">
-              <div className="flex items-center space-x-3 text-gray-400">
-                <Mail className="h-5 w-5 text-blue-400" />
-                <span>contact@predictivecare.com</span>
-              </div>
-              <div className="flex items-center space-x-3 text-gray-400">
-                <Phone className="h-5 w-5 text-blue-400" />
-                <span>+1 (555) 123-4567</span>
-              </div>
-              <div className="flex items-start space-x-3 text-gray-400">
-                <MapPin className="h-5 w-5 text-blue-400 mt-0.5" />
-                <span>123 Tech Street<br />Innovation City, ST 12345</span>
-              </div>
-            </div>
-          </div>
-
-          {/* Newsletter */}
-          <div>
-            <h3 className="text-lg font-semibold mb-6">Newsletter</h3>
-            <p className="text-gray-400 mb-4">Stay updated with our latest features and news.</p>
-            <form className="space-y-3">
-              <input
-                type="email"
-                placeholder="Enter your email"
-                className="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-white placeholder-gray-500"
-              />
-              <button
-                type="submit"
-                className="w-full px-4 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-xl font-semibold hover:from-blue-700 hover:to-indigo-700 transition-all duration-200 shadow-lg shadow-blue-500/25"
+            <div className="space-y-3">
+              <a
+                href="mailto:contact@predictivecare.ai"
+                className="flex items-center gap-3 text-gray-400 hover:text-white transition-colors text-sm"
               >
-                Subscribe
-              </button>
-            </form>
+                <Mail className="w-4 h-4" />
+                contact@predictivecare.ai
+              </a>
+              <a
+                href="tel:+1234567890"
+                className="flex items-center gap-3 text-gray-400 hover:text-white transition-colors text-sm"
+              >
+                <Phone className="w-4 h-4" />
+                +1 (234) 567-890
+              </a>
+              <div className="flex items-center gap-3 text-gray-400 text-sm">
+                <MapPin className="w-4 h-4" />
+                San Francisco, CA
+              </div>
+            </div>
+          </div>
+
+          {/* Product Links */}
+          <div>
+            <h4 className="text-white font-semibold mb-4">Product</h4>
+            <ul className="space-y-3">
+              {footerLinks.product.map((link) => (
+                <li key={link.name}>
+                  <Link
+                    href={link.href}
+                    className="text-gray-400 hover:text-white transition-colors text-sm inline-flex items-center gap-1 group"
+                  >
+                    {link.name}
+                    <ArrowUpRight className="w-3 h-3 opacity-0 group-hover:opacity-100 transition-opacity" />
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Company Links */}
+          <div>
+            <h4 className="text-white font-semibold mb-4">Company</h4>
+            <ul className="space-y-3">
+              {footerLinks.company.map((link) => (
+                <li key={link.name}>
+                  <Link
+                    href={link.href}
+                    className="text-gray-400 hover:text-white transition-colors text-sm inline-flex items-center gap-1 group"
+                  >
+                    {link.name}
+                    <ArrowUpRight className="w-3 h-3 opacity-0 group-hover:opacity-100 transition-opacity" />
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Legal Links */}
+          <div>
+            <h4 className="text-white font-semibold mb-4">Legal</h4>
+            <ul className="space-y-3">
+              {footerLinks.legal.map((link) => (
+                <li key={link.name}>
+                  <Link
+                    href={link.href}
+                    className="text-gray-400 hover:text-white transition-colors text-sm inline-flex items-center gap-1 group"
+                  >
+                    {link.name}
+                    <ArrowUpRight className="w-3 h-3 opacity-0 group-hover:opacity-100 transition-opacity" />
+                  </Link>
+                </li>
+              ))}
+            </ul>
           </div>
         </div>
 
-        <div className="mt-16 pt-8 border-t border-gray-800">
-          <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
-            <p className="text-gray-400 text-sm">
-              © {new Date().getFullYear()} PredictiveCare. All rights reserved.
-            </p>
-            <div className="flex space-x-6 text-sm text-gray-400">
-              <a href="#" className="hover:text-white transition-colors">Privacy Policy</a>
-              <a href="#" className="hover:text-white transition-colors">Terms of Service</a>
-              <a href="#" className="hover:text-white transition-colors">Cookie Policy</a>
-            </div>
+        {/* Bottom Bar */}
+        <div className="py-8 border-t border-white/10 flex flex-col md:flex-row items-center justify-between gap-4">
+          <p className="text-gray-500 text-sm flex items-center gap-1">
+            © 2025 PredictiveCare. Made with{" "}
+            <Heart className="w-4 h-4 text-red-500 fill-red-500" /> by the team
+          </p>
+          <div className="flex items-center gap-4">
+            {socialLinks.map((social) => (
+              <motion.a
+                key={social.name}
+                href={social.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                whileHover={{ scale: 1.1, y: -2 }}
+                whileTap={{ scale: 0.9 }}
+                className="p-2 rounded-xl bg-white/5 text-gray-400 hover:text-white hover:bg-white/10 transition-colors"
+              >
+                <social.icon className="w-5 h-5" />
+              </motion.a>
+            ))}
           </div>
         </div>
       </div>
