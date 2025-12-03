@@ -36,6 +36,11 @@ interface MLModelVisualizerProps {
     torque: number;
     tool_wear: number;
   };
+  // Direct prediction props for external control
+  probability?: number;
+  riskLevel?: "low" | "medium" | "high" | "critical";
+  confidence?: number;
+  features?: Array<{ name: string; importance: number }>;
   autoPredict?: boolean;
   predictionInterval?: number;
 }
@@ -43,6 +48,10 @@ interface MLModelVisualizerProps {
 export function MLModelVisualizer({
   className,
   sensorData,
+  probability: externalProbability,
+  riskLevel: externalRiskLevel,
+  confidence: externalConfidence,
+  features: externalFeatures,
   autoPredict = true,
   predictionInterval = 5000,
 }: MLModelVisualizerProps) {
@@ -50,6 +59,18 @@ export function MLModelVisualizer({
   const [isLoading, setIsLoading] = useState(false);
   const [lastUpdate, setLastUpdate] = useState<Date | null>(null);
   const [modelStatus, setModelStatus] = useState<"healthy" | "warning" | "critical" | "offline">("healthy");
+
+  // Use external props if provided
+  const effectivePrediction: PredictionResult | null = externalProbability !== undefined ? {
+    failure_probability: externalProbability / 100,
+    risk_level: externalRiskLevel || "low",
+    confidence: (externalConfidence || 95) / 100,
+    feature_importance: externalFeatures 
+      ? Object.fromEntries(externalFeatures.map(f => [f.name.toLowerCase().replace(/ /g, '_'), f.importance]))
+      : { tool_wear: 0.35, temperature: 0.25, torque: 0.22, rpm: 0.18 },
+    prediction_time: new Date().toISOString(),
+    model_type: "ensemble",
+  } : prediction;
 
   // Simulate ML prediction
   const makePrediction = async () => {
@@ -108,13 +129,22 @@ export function MLModelVisualizer({
   };
 
   useEffect(() => {
+    // Skip internal prediction if using external props
+    if (externalProbability !== undefined) {
+      setLastUpdate(new Date());
+      if (externalRiskLevel === "critical") setModelStatus("critical");
+      else if (externalRiskLevel === "high" || externalRiskLevel === "medium") setModelStatus("warning");
+      else setModelStatus("healthy");
+      return;
+    }
+
     makePrediction();
 
     if (autoPredict) {
       const interval = setInterval(makePrediction, predictionInterval);
       return () => clearInterval(interval);
     }
-  }, [autoPredict, predictionInterval, sensorData]);
+  }, [autoPredict, predictionInterval, sensorData, externalProbability, externalRiskLevel]);
 
   const getRiskColor = (risk: string) => {
     switch (risk) {
@@ -161,7 +191,7 @@ export function MLModelVisualizer({
 
       <CardContent className="p-6">
         <AnimatePresence mode="wait">
-          {isLoading && !prediction ? (
+          {isLoading && !effectivePrediction ? (
             <motion.div
               key="loading"
               initial={{ opacity: 0 }}
@@ -171,7 +201,7 @@ export function MLModelVisualizer({
             >
               <Loader2 className="w-8 h-8 text-cyan-500 animate-spin" />
             </motion.div>
-          ) : prediction ? (
+          ) : effectivePrediction ? (
             <motion.div
               key="prediction"
               initial={{ opacity: 0, y: 20 }}
@@ -183,9 +213,9 @@ export function MLModelVisualizer({
               <div className="grid grid-cols-3 gap-4">
                 <div className="col-span-1 flex justify-center">
                   <RadialProgress
-                    value={prediction.failure_probability * 100}
+                    value={effectivePrediction.failure_probability * 100}
                     label="Failure Risk"
-                    color={getRiskColor(prediction.risk_level)}
+                    color={getRiskColor(effectivePrediction.risk_level)}
                     size={140}
                     strokeWidth={12}
                   />
@@ -199,17 +229,17 @@ export function MLModelVisualizer({
                     </div>
                     <Badge
                       variant={
-                        prediction.risk_level === "critical"
+                        effectivePrediction.risk_level === "critical"
                           ? "danger"
-                          : prediction.risk_level === "high"
+                          : effectivePrediction.risk_level === "high"
                           ? "warning"
-                          : prediction.risk_level === "medium"
+                          : effectivePrediction.risk_level === "medium"
                           ? "warning"
                           : "success"
                       }
-                      pulse={prediction.risk_level === "critical"}
+                      pulse={effectivePrediction.risk_level === "critical"}
                     >
-                      {prediction.risk_level.toUpperCase()}
+                      {effectivePrediction.risk_level.toUpperCase()}
                     </Badge>
                   </div>
 
@@ -219,7 +249,7 @@ export function MLModelVisualizer({
                       <span className="text-sm text-gray-400">Confidence</span>
                     </div>
                     <span className="text-lg font-semibold text-white">
-                      {(prediction.confidence * 100).toFixed(1)}%
+                      {(effectivePrediction.confidence * 100).toFixed(1)}%
                     </span>
                   </div>
 
@@ -229,7 +259,7 @@ export function MLModelVisualizer({
                       <span className="text-sm text-gray-400">Model Type</span>
                     </div>
                     <span className="text-sm font-medium text-white capitalize">
-                      {prediction.model_type}
+                      {effectivePrediction.model_type}
                     </span>
                   </div>
                 </div>
@@ -242,7 +272,7 @@ export function MLModelVisualizer({
                   <span className="text-sm font-medium text-white">Feature Importance</span>
                 </div>
                 <div className="space-y-3">
-                  {Object.entries(prediction.feature_importance)
+                  {Object.entries(effectivePrediction.feature_importance)
                     .sort(([, a], [, b]) => b - a)
                     .map(([feature, importance], index) => (
                       <motion.div

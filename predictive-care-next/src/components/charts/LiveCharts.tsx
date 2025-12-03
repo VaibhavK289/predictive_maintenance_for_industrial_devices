@@ -24,10 +24,13 @@ interface DataPoint {
 interface LiveLineChartProps {
   className?: string;
   title?: string;
+  label?: string;
   unit?: string;
   color?: string;
   minValue?: number;
   maxValue?: number;
+  height?: number;
+  yAxisDomain?: [number, number];
   dataPoints?: number;
   updateInterval?: number;
   valueGenerator?: () => number;
@@ -36,20 +39,27 @@ interface LiveLineChartProps {
 export function LiveLineChart({
   className,
   title = "Live Data",
+  label,
   unit = "",
   color = "#22d3ee",
   minValue = 0,
   maxValue = 100,
+  height = 150,
+  yAxisDomain,
   dataPoints = 20,
   updateInterval = 1000,
   valueGenerator,
 }: LiveLineChartProps) {
   const [data, setData] = useState<DataPoint[]>([]);
 
+  const effectiveMinValue = yAxisDomain ? yAxisDomain[0] : minValue;
+  const effectiveMaxValue = yAxisDomain ? yAxisDomain[1] : maxValue;
+  const displayTitle = label || title;
+
   const generateValue = useCallback(() => {
     if (valueGenerator) return valueGenerator();
-    return Math.random() * (maxValue - minValue) + minValue;
-  }, [valueGenerator, minValue, maxValue]);
+    return Math.random() * (effectiveMaxValue - effectiveMinValue) + effectiveMinValue;
+  }, [valueGenerator, effectiveMinValue, effectiveMaxValue]);
 
   useEffect(() => {
     // Initialize data
@@ -88,7 +98,7 @@ export function LiveLineChart({
   return (
     <div className={cn("w-full", className)}>
       <div className="flex items-center justify-between mb-4">
-        <span className="text-sm text-gray-400">{title}</span>
+        <span className="text-sm text-gray-400">{displayTitle}</span>
         <motion.span
           key={currentValue}
           initial={{ opacity: 0, scale: 0.8 }}
@@ -99,10 +109,10 @@ export function LiveLineChart({
           <span className="text-sm text-gray-400 ml-1">{unit}</span>
         </motion.span>
       </div>
-      <ResponsiveContainer width="100%" height={150}>
+      <ResponsiveContainer width="100%" height={height}>
         <AreaChart data={data}>
           <defs>
-            <linearGradient id={`gradient-${title}`} x1="0" y1="0" x2="0" y2="1">
+            <linearGradient id={`gradient-${displayTitle}`} x1="0" y1="0" x2="0" y2="1">
               <stop offset="0%" stopColor={color} stopOpacity={0.3} />
               <stop offset="100%" stopColor={color} stopOpacity={0} />
             </linearGradient>
@@ -116,7 +126,7 @@ export function LiveLineChart({
             axisLine={false}
           />
           <YAxis
-            domain={[minValue, maxValue]}
+            domain={[effectiveMinValue, effectiveMaxValue]}
             stroke="rgba(255,255,255,0.3)"
             tick={{ fontSize: 10 }}
             tickLine={false}
@@ -138,7 +148,7 @@ export function LiveLineChart({
             dataKey="value"
             stroke={color}
             strokeWidth={2}
-            fill={`url(#gradient-${title})`}
+            fill={`url(#gradient-${displayTitle})`}
             animationDuration={300}
           />
         </AreaChart>
@@ -155,6 +165,7 @@ interface MultiLineChartProps {
     name: string;
     color: string;
   }>;
+  height?: number;
   dataPoints?: number;
   updateInterval?: number;
 }
@@ -163,6 +174,7 @@ export function MultiLineChart({
   className,
   title = "Multi-Line Chart",
   lines,
+  height = 200,
   dataPoints = 20,
   updateInterval = 1000,
 }: MultiLineChartProps) {
@@ -217,7 +229,7 @@ export function MultiLineChart({
           ))}
         </div>
       </div>
-      <ResponsiveContainer width="100%" height={200}>
+      <ResponsiveContainer width="100%" height={height}>
         <LineChart data={data}>
           <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" />
           <XAxis

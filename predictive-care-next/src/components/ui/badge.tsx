@@ -3,7 +3,7 @@
 import { cn } from "@/lib/utils";
 
 interface BadgeProps extends React.HTMLAttributes<HTMLDivElement> {
-  variant?: "default" | "success" | "warning" | "danger" | "info" | "outline";
+  variant?: "default" | "success" | "warning" | "danger" | "info" | "outline" | "destructive" | "secondary";
   pulse?: boolean;
 }
 
@@ -18,8 +18,10 @@ export function Badge({
     success: "bg-green-500/20 text-green-400 border-green-500/50",
     warning: "bg-yellow-500/20 text-yellow-400 border-yellow-500/50",
     danger: "bg-red-500/20 text-red-400 border-red-500/50",
+    destructive: "bg-red-500/20 text-red-400 border-red-500/50",
     info: "bg-cyan-500/20 text-cyan-400 border-cyan-500/50",
     outline: "bg-transparent text-gray-300 border-white/20",
+    secondary: "bg-gray-700/50 text-gray-300 border-gray-600/50",
   };
 
   return (
@@ -38,7 +40,7 @@ export function Badge({
               "animate-ping absolute inline-flex h-full w-full rounded-full opacity-75",
               variant === "success" && "bg-green-400",
               variant === "warning" && "bg-yellow-400",
-              variant === "danger" && "bg-red-400",
+              (variant === "danger" || variant === "destructive") && "bg-red-400",
               variant === "info" && "bg-cyan-400",
               variant === "default" && "bg-gray-400"
             )}
@@ -48,7 +50,7 @@ export function Badge({
               "relative inline-flex rounded-full h-2 w-2",
               variant === "success" && "bg-green-500",
               variant === "warning" && "bg-yellow-500",
-              variant === "danger" && "bg-red-500",
+              (variant === "danger" || variant === "destructive") && "bg-red-500",
               variant === "info" && "bg-cyan-500",
               variant === "default" && "bg-gray-500"
             )}
