@@ -1,0 +1,59 @@
+# Dependencies
+node_modules/
+**/node_modules/
+
+# Virtual Environments
+predictive_maintenance_env/
+venv/
+.venv/
+env/
+**/predictive_maintenance_env/
+
+# Python
+__pycache__/
+**/__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.egg-info/
+.eggs/
+dist/
+build/
+
+# Next.js
+.next/
+**/.next/
+out/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Environment
+.env
+.env.local
+.env*.local
+
+# Logs
+*.log
+logs/
+npm-debug.log*
+
+# OS
+.DS_Store
+Thumbs.db
+
+# ChromaDB (can be regenerated)
+**/chroma_db/
+
+# Nested git repos (we'll include the content but not the .git folders)
+epics-backend/.git/
+epics-frontend/.git/
+iot/.git/
+ML-Model/.git/
+EPICS-references/.git/
+ml-enterprise/.git/
+predictive-care-next/.git/

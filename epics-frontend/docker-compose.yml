@@ -1,0 +1,23 @@
+#version: '3.8'
+
+services:
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "80:80"
+      - "3000:3000"
+    restart: unless-stopped
+    # Uncomment and adjust if you need to connect to a backend service
+    # environment:
+    #   - API_URL=http://backend:5000/api
+    # depends_on:
+    #   - backend
+  
+  # Uncomment if you have a backend service
+  # backend:
+  #   build: ./backend
+  #   ports:
+  #     - "5000:5000"
+  #   restart: unless-stopped
