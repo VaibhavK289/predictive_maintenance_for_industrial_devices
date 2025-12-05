@@ -2,7 +2,7 @@
 
 A comprehensive enterprise-level IoT solution for predictive maintenance of industrial machinery, featuring real-time monitoring, machine learning predictions, and intelligent alerts.
 
-## 📁 Project Structure
+##  Project Structure
 
 ```
 predictive_maintenance/
@@ -14,7 +14,7 @@ predictive_maintenance/
 └── ML-Model/                # Original ML Notebook
 ```
 
-## 🚀 Quick Start
+##  Quick Start
 
 ### Prerequisites
 - Node.js 18+
@@ -42,7 +42,7 @@ npm run dev
 
 Visit: http://localhost:3000
 
-## 🎯 Features
+##  Features
 
 ### Frontend (Next.js 16)
 - ✨ Modern UI with Tailwind CSS v4
@@ -84,7 +84,7 @@ Visit: http://localhost:3000
 - **Features**: Temperature, Rotational Speed, Torque, Tool Wear
 - **Top Feature**: Tool Wear (35% importance)
 
-## 🧪 Testing
+##  Testing
 
 ```bash
 cd ml-enterprise
@@ -92,10 +92,10 @@ python tests/test_api.py          # API tests
 python tests/test_integration.py  # Integration tests
 ```
 
-## 👥 Team
+##  Team
 
 **Epics IoT Project Devs**
 
-## 📄 License
+##  License
 
 MIT License
