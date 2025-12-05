@@ -68,7 +68,7 @@ Visit: http://localhost:3000
 | `GET /api/recommendations` | Maintenance recommendations |
 | `GET /api/knowledge/stats` | Knowledge base statistics |
 
-## 🛠️ Tech Stack
+##  Tech Stack
 
 | Component | Technologies |
 |-----------|-------------|
@@ -78,7 +78,7 @@ Visit: http://localhost:3000
 | RAG | ChromaDB, Sentence-Transformers |
 | IoT | Arduino, DHT Sensors |
 
-## 📊 Model Performance
+##  Model Performance
 
 - **Model Type**: Ensemble (XGBoost + LightGBM + CatBoost)
 - **Features**: Temperature, Rotational Speed, Torque, Tool Wear
